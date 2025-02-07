@@ -26,14 +26,6 @@ pool.connect()
     .then(() => console.log("✅ Conectado a PostgreSQL"))
     .catch(err => console.error("❌ Error conectando a PostgreSQL", err));
 
-    app.get('/posts', async (req, res) => {
-        try {
-            const result = await pool.query('SELECT * FROM posts');
-            res.json(result.rows);
-        } catch (error) {
-            res.status(500).json({ error: 'Error obteniendo posts' });
-        }
-    });
 
 
     app.get('/posts', async (req, res) => {
