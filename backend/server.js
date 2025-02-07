@@ -47,7 +47,39 @@ pool.connect()
             );
             res.status(201).json(result.rows[0]);
         } catch (error) {
-            res.status(500).json({ error: 'Error agregando el post' });
+            res.status(500).json({ error: 'Error agregando en el post' });
         }
     });
     
+    app.delete('/posts/:id', async (req, res) => {
+        const { id } = req.params;
+    
+        try {
+            const result = await pool.query('DELETE FROM posts WHERE id = $1', [id]);
+    
+            if (result.rowCount === 0) {
+                return res.status(404).json({ message: 'Post no encontrado' });
+            }
+    
+            res.json({ message: 'Post eliminado correctamente' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Error en el servidor' });
+        }
+    });
+    app.use(express.json());
+
+    
+app.patch("/posts/:id/like", (req, res) => {
+    const { id } = req.params;
+    const posts = posts.find(p => p.id === parseInt(id));
+
+    if (!posts) {
+        return res.status(404).json({ error: "Post no encontrado" });
+    }
+
+    posts.likes += 1;
+    res.json(posts);
+});
+
+// nota, me medio perdi en la parte II de like me, cualquier cosa quedo atento a correcion.
